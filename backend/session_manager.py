@@ -102,9 +102,11 @@ class SessionCapacityError(Exception):
 
 
 # ── Capacity limits ─────────────────────────────────────────────────
-# Estimated for HF Spaces cpu-basic (2 vCPU, 16 GB RAM).
-# Each session uses ~10-20 MB (context, tools, queues, task).
-MAX_SESSIONS: int = 50
+# Sized for HF Spaces 8 vCPU / 32 GB RAM.
+# Each session uses ~10-20 MB (context, tools, queues, task); 200 × 20 MB
+# = 4 GB worst case, leaving plenty of headroom for the Python runtime
+# and per-request overhead.
+MAX_SESSIONS: int = 200
 MAX_SESSIONS_PER_USER: int = 10
 
 
