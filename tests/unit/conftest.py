@@ -18,9 +18,9 @@ def create_fake_package(name):
 
 def _install_stubs():
     """Install comprehensive stubs for all external dependencies.
-    
-    This must be called VERY EARLY, before any agent imports happen.
-    It's called from pytest_configure which runs before collection.
+
+    This must run at import time because some tests import modules that pull
+    in agent dependencies at module import, before pytest hooks execute.
     """
     # Web frameworks
     fastapi_module = create_fake_package('fastapi')
@@ -89,6 +89,8 @@ def _install_stubs():
 
 
 # Install stubs IMMEDIATELY on module load (before pytest collection)
+# Keep this at module scope: importing test modules can trigger dependency
+# imports before pytest hooks run, so the stubs must already be present.
 _install_stubs()
 
 
